@@ -1,10 +1,14 @@
 package com.example.kidslearningapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -25,6 +29,7 @@ public class MathActivity extends AppCompatActivity {
     private List<MathQuestion> mathQuestions = new ArrayList<>();
     private TextView TVMathQ1, TVMathQ2, TVMathQ3;
     private RadioButton RBMathQ1A, RBMathQ1B, RBMathQ2A, RBMathQ2B, RBMathQ3A, RBMathQ3B;
+    private int correctAnswerCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +125,59 @@ public class MathActivity extends AppCompatActivity {
             }
 
         }
+
+        Button BtnMathSubmit = findViewById(R.id.BtnMathSubmit);
+        BtnMathSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitAnswers();
+            }
+        });
+    }
+
+    public void submitAnswers(){
+        //Check selected answer and update correctAnswerCount
+        if(RBMathQ1A.isChecked() && RBMathQ1A.getTag().equals("correct")){
+            correctAnswerCount++;
+        } else if(RBMathQ1B.isChecked() && RBMathQ1B.getTag().equals("correct")){
+            correctAnswerCount++;
+        }
+
+        if(RBMathQ2A.isChecked() && RBMathQ2A.getTag().equals("correct")){
+            correctAnswerCount++;
+        } else if(RBMathQ2B.isChecked() && RBMathQ2B.getTag().equals("correct")){
+            correctAnswerCount++;
+        }
+
+        if(RBMathQ3A.isChecked() && RBMathQ3A.getTag().equals("correct")){
+            correctAnswerCount++;
+        } else if(RBMathQ3B.isChecked() && RBMathQ3B.getTag().equals("correct")){
+            correctAnswerCount++;
+        }
+
+        showResultPopup();
+    }
+
+    public void showResultPopup(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View popupView = getLayoutInflater().inflate(R.layout.result_popup, null);
+        builder.setView(popupView);
+
+        AlertDialog dialog = builder.create();
+        TextView TVResult = popupView.findViewById(R.id.TVResult);
+        TVResult.setText(correctAnswerCount + "/3");
+
+        Button BtnOK = popupView.findViewById(R.id.BtnOK);
+        BtnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                Intent intent = new Intent(MathActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        dialog.show();
     }
 
     @Override
