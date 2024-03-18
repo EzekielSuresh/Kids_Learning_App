@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "12376453",
+    "project_id": "kids-learning-app-29602",
+    "storage_bucket": "kids-learning-app-29602.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12376453:android:4ef74cfaf8c7400bc00cec",
+        "android_client_info": {
+          "package_name": "com.example.kidslearningapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAraUWIFbiQCcfFBsMUDdKsw7lg8vKXrmw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

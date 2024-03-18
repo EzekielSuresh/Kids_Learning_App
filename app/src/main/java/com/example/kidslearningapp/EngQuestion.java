@@ -2,13 +2,27 @@ package com.example.kidslearningapp;
 
 public class EngQuestion {
 
-    private int question;
+    private String questionImage;
+    private String correctAnswer;
+    private String wrongAnswer;
 
-    public EngQuestion(int question) {
-        this.question = question;
+    public EngQuestion(){}
+
+    public EngQuestion(String questionImage, String correctAnswer, String wrongAnswer) {
+        this.questionImage = questionImage;
+        this.correctAnswer = correctAnswer;
+        this.wrongAnswer = wrongAnswer;
     }
 
-    public int getQuestion() {
-        return question;
+    public String getQuestionImage() {
+        return questionImage;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public String getWrongAnswer() {
+        return wrongAnswer;
     }
 }
