@@ -76,13 +76,13 @@
             android:id="@+id/RBEngQ1A"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Red" />
+            android:text="Blue" />
 
         <RadioButton
             android:id="@+id/RBEngQ1B"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Yellow" />
+            android:text="Blue" />
     </RadioGroup>
 
     <RadioGroup
@@ -107,7 +107,7 @@
             android:id="@+id/RBEngQ2B"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Orange" />
+            android:text="Blue" />
     </RadioGroup>
 
     <RadioGroup
@@ -126,13 +126,13 @@
             android:id="@+id/RBEngQ3A"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Red" />
+            android:text="Blue" />
 
         <RadioButton
             android:id="@+id/RBEngQ3B"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Green" />
+            android:text="Blue" />
     </RadioGroup>
 
     <Button

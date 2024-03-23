@@ -1,17 +1,28 @@
 package com.example.kidslearningapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +70,7 @@ public class EnglishActivity extends AppCompatActivity {
 
                 //Display the questions in the list
                 displayQuestions();
-            }
+            };
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -78,10 +89,10 @@ public class EnglishActivity extends AppCompatActivity {
             EngQuestion Q2 = engQuestions.get(1);
             EngQuestion Q3 = engQuestions.get(2);
 
-            //Display questions on ImageViews
-            /*IVEngQ1.setImageResource(Q1.getQuestionImage());
-            IVEngQ2.setImageResource(Q2.getQuestionImage());
-            IVEngQ3.setImageResource(Q3.getQuestionImage());*/
+            // Load image using Glide library
+            loadQuestionImage(Q1.getQuestionImage(), IVEngQ1);
+            loadQuestionImage(Q2.getQuestionImage(), IVEngQ2);
+            loadQuestionImage(Q3.getQuestionImage(), IVEngQ3);
 
             //Assign correct and wrong answers to radio buttons randomly
             Random random = new Random();
@@ -126,8 +137,84 @@ public class EnglishActivity extends AppCompatActivity {
                 RBEngQ3B.setText(Q3.getWrongAnswer());
                 RBEngQ3B.setTag("wrong");
             }
+
+            Button BtnEngSubmit = findViewById(R.id.BtnEngSubmit);
+            BtnEngSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    submitAnswers();
+                }
+            });
         }
     }
 
+    private void loadQuestionImage(String imageUrl, ImageView imageView){
+
+        // Create s Firebase Storage reference from the image url
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
+
+        // Get the download URL for the image
+        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            //Image URL retrieved successfully
+            String downloadUrl = uri.toString();
+
+            // Load it into ImageView using Glide
+            // Cache image both in memory and disk
+            RequestOptions requestOptions = new RequestOptions()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL);
+            Glide.with(this)
+                    .load(downloadUrl)
+                    .apply(requestOptions)
+                    .into(imageView);
+        }).addOnFailureListener(exception -> {
+            // Handle errors that may occur while getting download URL
+            Log.e("TAG", "Failed to get download URL: " + exception.getMessage());
+        });
+    }
+
+    public void submitAnswers(){
+        //Check selected answer and update correctAnswerCount
+        if(RBEngQ1A.isChecked() && RBEngQ1A.getTag().equals("correct")){
+            correctAnswerCount++;
+        } else if(RBEngQ1B.isChecked() && RBEngQ1B.getTag().equals("correct")){
+            correctAnswerCount++;
+        }
+
+        if(RBEngQ2A.isChecked() && RBEngQ2A.getTag().equals("correct")){
+            correctAnswerCount++;
+        } else if(RBEngQ2B.isChecked() && RBEngQ2B.getTag().equals("correct")){
+            correctAnswerCount++;
+        }
+
+        if(RBEngQ3A.isChecked() && RBEngQ3A.getTag().equals("correct")){
+            correctAnswerCount++;
+        } else if(RBEngQ3B.isChecked() && RBEngQ3B.getTag().equals("correct")){
+            correctAnswerCount++;
+        }
+
+        showResultPopup();
+    }
+
+    public void showResultPopup(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View popupView = getLayoutInflater().inflate(R.layout.result_popup, null);
+        builder.setView(popupView);
+
+        AlertDialog dialog = builder.create();
+        TextView TVResult = popupView.findViewById(R.id.TVResult);
+        TVResult.setText(correctAnswerCount + "/3");
+
+        Button BtnOK = popupView.findViewById(R.id.BtnOK);
+        BtnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                Intent intent = new Intent(EnglishActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        dialog.show();
+    }
 
 }
